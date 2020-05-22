@@ -1,6 +1,7 @@
 // Node hub 2020
 
 var express = require("express");
+var favicon = require('serve-favicon');
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(favicon(path.join(__dirname,'public','images','junket_logo_j_big_thin.ico')));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
