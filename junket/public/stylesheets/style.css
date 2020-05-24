@@ -8,7 +8,7 @@ body {
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  padding-top: 40px;
+  padding-top: 01px;
   padding-bottom: 40px;
   background-color: #121212;
   color: #FFFFFF;
@@ -39,6 +39,15 @@ body {
 .form-signin input {
   border-radius: 0;
   margin-bottom: -1px;
+}
+.form-signin img {
+  width: 60%;
+  height: 60%;
+}
+.form-signin footer {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
 }
 .form-signin input:first-of-type {
   border-top-left-radius: 0.25rem;
