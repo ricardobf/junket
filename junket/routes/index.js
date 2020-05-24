@@ -44,8 +44,9 @@ router.post("/user", function(req, res, next) {
 
   // LDAP Connection Settings
   const server = "orb.sense.dcc.ufmg.br"; // 192.168.1.1
-  const userPrincipalName = str.concat(login, "sense.dcc.ufmg.br");
+  const userPrincipalName = login.concat("@sense.dcc.ufmg.br");
   const adSuffix = "dc=sense,dc=dcc,dc=ufmg,dc=br"; // test.com
+  var information = {accountExpires: '', principalName: '', memberOf: ''};
 
   // Create client and bind to AD
   const client = ldap.createClient({
@@ -66,8 +67,15 @@ router.post("/user", function(req, res, next) {
       assert.ifError(err);
 
       res.on('searchEntry', entry => {
-          console.log(entry.object.name);
-          console.log(entry.object);
+          console.log(entry.object.givenName);
+          // console.log(entry.object);
+          // console.log(entry.object.accountExpires);
+          // accountExpires = Date(entry.object.accountExpires/1e4 - 1.16444736e13).toISOString();
+          
+          information.accountExpires = entry.object.accountExpires;
+          information.principalName = entry.object.name;
+          information.memberOf = entry.object.memberOf;
+          // console.log(information.memberOf);
       });
       res.on('searchReference', referral => {
           console.log('referral: ' + referral.uris.join());
@@ -85,10 +93,28 @@ router.post("/user", function(req, res, next) {
       assert.ifError(err);
   });
 
+  // if(information.memberOf == 'CN=Administrators,CN=Builtin,DC=sense,DC=dcc,DC=ufmg,DC=br') {
+  //   res.render("admin", {
+  //     title: "Welcome",
+  //     login,
+  //     password,
+  //     information
+  //   });
+  // }
+  // else {
+  //   res.render("user", {
+  //     title: "Welcome",
+  //     login,
+  //     password,
+  //     information
+  //   });
+  // }
+
   res.render("user", {
     title: "Welcome",
     login,
-    password
+    password,
+    information
   });
 });
 
