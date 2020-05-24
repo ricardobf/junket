@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var ldap = require('ldapjs');
+const assert = require('assert');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -40,13 +41,48 @@ router.post("/admin", function(req, res, next) {
 router.post("/user", function(req, res, next) {
   const { login, password } = req.body;
 
-  
-  var client = ldap.createClient({
-    url: 'ldap://orb.sense.dcc.ufmg.br:389'
+
+  // LDAP Connection Settings
+  const server = "orb.sense.dcc.ufmg.br"; // 192.168.1.1
+  const userPrincipalName = str.concat(login, "sense.dcc.ufmg.br");
+  const adSuffix = "dc=sense,dc=dcc,dc=ufmg,dc=br"; // test.com
+
+  // Create client and bind to AD
+  const client = ldap.createClient({
+      url: `ldap://${server}`
   });
 
-  client.bind('cn=ricardobarbosa', 'Junketws4', function(err) {
-    assert.ifError(err);
+  client.bind(userPrincipalName,password,err => {
+      assert.ifError(err);
+  });
+
+  // Search AD for user
+  const searchOptions = {
+      scope: "sub",
+      filter: `(userPrincipalName=${userPrincipalName})`
+  };
+
+  client.search(adSuffix,searchOptions,(err,res) => {
+      assert.ifError(err);
+
+      res.on('searchEntry', entry => {
+          console.log(entry.object.name);
+          console.log(entry.object);
+      });
+      res.on('searchReference', referral => {
+          console.log('referral: ' + referral.uris.join());
+      });
+      res.on('error', err => {
+          console.error('error: ' + err.message);
+      });
+      res.on('end', result => {
+          console.log(result);
+      });
+  });
+
+  // Wrap up
+  client.unbind( err => {
+      assert.ifError(err);
   });
 
   res.render("user", {
