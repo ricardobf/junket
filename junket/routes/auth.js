@@ -8,7 +8,7 @@ router.get('/signin', function(req, res, next) {
 
 router.post('/signin', function(req, res, next) {
   const { login, password } = req.body;
-  
+
   // if auth ldap.js
   res.redirect('/user');
   // else(){
