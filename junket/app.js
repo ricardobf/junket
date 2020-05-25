@@ -7,7 +7,9 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
+var authRouter = require("./routes/auth");
 var usersRouter = require("./routes/user");
+var adminRouter = require("./routes/admin");
 
 var app = express();
 
@@ -23,7 +25,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(favicon(path.join(__dirname,'public','images','junket_logo_j_big_thin.ico')));
 
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 app.use("/user", usersRouter);
+app.use("/admin", adminRouter);
 
 var listener = app.listen(8080, function() {
   console.log("Listening on port " + listener.address().port);
