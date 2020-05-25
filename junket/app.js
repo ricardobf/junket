@@ -1,4 +1,4 @@
-// Node hub 2020
+// Junket
 
 var express = require("express");
 var favicon = require('serve-favicon');
@@ -7,7 +7,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var usersRouter = require("./routes/user");
 
 var app = express();
 
@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(favicon(path.join(__dirname,'public','images','junket_logo_j_big_thin.ico')));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/user", usersRouter);
 
 var listener = app.listen(8080, function() {
   console.log("Listening on port " + listener.address().port);
