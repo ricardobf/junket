@@ -6,8 +6,8 @@ router.get('/', function(req, res, next) {
 
     
 
-    sess = req.session;
-    if(sess.email) {
+    // sess = req.session;
+    if(req.session.name) {
         return res.redirect('/user');
     }
 

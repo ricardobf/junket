@@ -6,7 +6,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const session = require('express-session');
-const bodyParser = require('body-parser');
 
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth");
@@ -19,11 +18,13 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
-app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
-app.use(bodyParser.json());      
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(session({secret: "Shh, its a secret!"}));
 
-var sess;
+// app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+// app.use(bodyParser.json());      
+// app.use(bodyParser.urlencoded({extended: true}));
+
+// var sess;
 
 app.use(logger("dev"));
 app.use(express.json());
