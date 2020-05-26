@@ -1,9 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/signin', function(req, res, next) {
-  res.render('index', { title: 'Junket' });
+router.get('/', function(req, res, next) {
+  const { login, password } = req.body;
+  // SE TIVER LOGADO
+  res.render("admin/admin", {
+    title: "Welcome",
+    login,
+    password
+  });
+  // SENAO
+  // res.redirect('/auth/signin');
 });
 
 module.exports = router;
