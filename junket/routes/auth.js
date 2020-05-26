@@ -17,6 +17,21 @@ router.post('/signin', function(req, res, next) {
   // }
 });
 
+router.get('/signup', function(req, res, next) {
+  res.render('auth/signup', { title: 'Junket' });
+});
+
+router.post('/signup', function(req, res, next) {
+  const { login, password } = req.body;
+
+
+  res.render("auth/signup", {
+    title: "Welcome",
+    login,
+    password
+  });
+});
+
 module.exports = router;
 
 
