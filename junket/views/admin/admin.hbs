@@ -1,11 +1,15 @@
 <div class="full-width text-center">
-  <h1 class="display-3">Welcome, {{name}}! You are admin!</h1>
-  <p class="lead"><strong>Please check your email</strong> to confirm your subscription to our newsletter.</p>
+  <h1 class="display-3">Welcome, {{principalName}}! You are an admin!</h1>
+  <h1 class="display-3">Your account expires:{{accountExpires}}</h1>
+  <p class="lead"><strong>Voce pertence aos grupos:</strong> {{memberOf}}</p>
   <hr>
-  <p>
-      Having trouble? <a href="">Contact us</a>
+  <p class="lead">
+      <a class="btn btn-primary btn-sm" href="/admin/register" role="button">Create User</a>
   </p>
   <p class="lead">
-      <a class="btn btn-primary btn-sm" href="/" role="button">Continue to homepage</a>
+      <a class="btn btn-primary btn-sm" href="/auth/changepwd" role="button">Change Password</a>
+  </p>
+  <p class="lead">
+      <a class="btn btn-secondary btn-sm" href="/auth/logout" role="button">Logout</a>
   </p>
 </div>

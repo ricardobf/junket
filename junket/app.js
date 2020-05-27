@@ -18,13 +18,12 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
-app.use(session({secret: "Shh, its a secret!"}));
-
-// app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
-// app.use(bodyParser.json());      
-// app.use(bodyParser.urlencoded({extended: true}));
-
-// var sess;
+app.use(session({
+  secret: "Secret",
+  proxy: true,
+  resave: false,
+  saveUninitialized: false
+}));
 
 app.use(logger("dev"));
 app.use(express.json());
