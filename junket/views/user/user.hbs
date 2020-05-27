@@ -1,12 +1,32 @@
-<div class="full-width text-center">
-  <h5 class="display-5">Welcome, {{firstName}}.</h5>
-  <h1 class="display-3">Your account expires:{{accountExpires}}</h1>
-  <p class="lead"><strong>Voce pertence aos grupos:</strong> {{memberOf}}</p>
+<div class="full-width text-left">
+  <h5 class="display-5">Welcome, {{firstName}}</h5>
+  <pre></pre><pre></pre><pre></pre>
+  <h6 class="display-6">Your account expires: {{accountExpires}}</h6>
+  <h6 class="display-6">Your groups: {{memberOf}}</h6>
+  {{!-- <p class="list-style-type">{{memberOf}}</p> --}}
+
+
+  <ul class="list-group text-center">
+  <li class="list-group-item">a</li>
+  <li class="list-group-item">b</li>
+  <li class="list-group-item">c</li>
+  <li class="list-group-item">d</li>
+  <li class="list-group-item">e</li>
+  </ul>
+  {{!-- <p class="lead"><strong>Your groups:</strong> {{memberOf}}</p> --}}
   <hr>
-  <p class="lead">
+  {{!-- <p class="lead">
       <a class="btn btn-primary btn-sm" href="/auth/changepwd" role="button">Change Password</a>
   </p>
   <p class="lead">
       <a class="btn btn-secondary btn-sm" href="/auth/logout" role="button">Logout</a>
-  </p>
+  </p> --}}
+  <div class="user-page text-right">
+  <p class="lead">
+        <a class="btn btn-primary btn-sm" href="/auth/changepwd" role="button">Change Password</a>
+    </p>
+    <p class="lead">
+        <a class="btn btn-secondary btn-sm" href="/auth/logout" role="button">Logout</a>
+    </p>
+  </div>
 </div>

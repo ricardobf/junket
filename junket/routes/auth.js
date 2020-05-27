@@ -92,9 +92,9 @@ router.get('/changepwd', function(req, res, next) {
     res.render('auth/changepwd', { title: 'Change Password' });
   }
   else {
-    res.write('<h1>Please login first.</h1>');
-    res.end('<a href='+'/'+'>Login</a>');
-  }
+    res.status(404);
+    res.render("error/notfound");
+}
 });
 
 router.get('/logout',(req,res) => {

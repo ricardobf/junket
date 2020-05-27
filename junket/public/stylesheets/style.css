@@ -14,14 +14,45 @@ body {
   color: #FFFFFF;
 }
 
-.full-width {
+.list-group {
   width: 100%;
-  padding: 15px;
+  padding: 50px;
+  margin: auto;
+  max-width: 330px;
+}
+
+.list-group-item {
+  background-color: #262626;
+  /* border-left-color: #fff; */
+  /* center-color: #fff; */
+  /* border-right-color: #fff; */
+}
+
+
+.full-width {
+  -ms-flex-align: center;
+  align-items: center;
+  width: 100%;
+  padding: 50px;
+  margin: auto;
+  max-width: 730px;
+}
+
+.head {
+  /* width: 100%; */
+  /* padding: 1px; */
+  /* margin: auto; */
+  max-height: 10px;
+}
+
+.user-page {
+  width: 100%;
+  padding: 50px;
   margin: auto;
 }
 
 .form-signin {
-  max-width: 330px;
+  max-width: 340px;
 }
 .form-signin .checkbox {
   font-weight: 400;
