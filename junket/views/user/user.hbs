@@ -1,17 +1,12 @@
-<div class="full-width text-left">
+<div class="full-width text-center">
   <h5 class="display-5">Welcome, {{firstName}}</h5>
   <pre></pre><pre></pre><pre></pre>
   <h6 class="display-6">Your account expires: {{accountExpires}}</h6>
-  <h6 class="display-6">Your groups: {{memberOf}}</h6>
-  {{!-- <p class="list-style-type">{{memberOf}}</p> --}}
-
-
   <ul class="list-group text-center">
-  <li class="list-group-item">a</li>
-  <li class="list-group-item">b</li>
-  <li class="list-group-item">c</li>
-  <li class="list-group-item">d</li>
-  <li class="list-group-item">e</li>
+    <li class="list-group-item active">Your Groups</li>
+    {{#each memberOf as |group|}}
+      <li class="list-group-item">{{group}}</li>
+    {{/each}}
   </ul>
   {{!-- <p class="lead"><strong>Your groups:</strong> {{memberOf}}</p> --}}
   <hr>
@@ -21,7 +16,7 @@
   <p class="lead">
       <a class="btn btn-secondary btn-sm" href="/auth/logout" role="button">Logout</a>
   </p> --}}
-  <div class="user-page text-right">
+  <div class="user-page text-center">
   <p class="lead">
         <a class="btn btn-primary btn-sm" href="/auth/changepwd" role="button">Change Password</a>
     </p>

@@ -44,11 +44,46 @@ router.post('/signin', (req, res, next) => {
       // console.log(entry.object);
       // console.log(entry.object.accountExpires);          
 
+      
+      var principalName = entry.object.name;
+      var fullname = principalName.split(' ');
+      var firstName = fullname[0];
+
+      function ldapToJS(n) {
+        return new Date(n/1e4 - 1.16444736e13);
+      }
+      var accountExpires = ldapToJS(entry.object.accountExpires).toISOString();
+      accountExpires = accountExpires.substring(0,10);
+
+
+      var memberOf = entry.object.memberOf;
+      memberOf = memberOf.toString().split('=');
+      memberOf = memberOf.toString().split(',');
+      memberOf = memberOf.filter(e => e !== 'DC');
+      memberOf = memberOf.filter(e => e !== 'ufmg');
+      memberOf = memberOf.filter(e => e !== 'br');
+      memberOf = memberOf.filter(e => e !== 'sense');
+      memberOf = memberOf.filter(e => e !== 'Sense');
+      memberOf = memberOf.filter(e => e !== 'CN');
+      memberOf = memberOf.filter(e => e !== 'Users');
+      memberOf = memberOf.filter(e => e !== 'dcc');
+      memberOf = memberOf.filter(e => e !== 'NPS');
+      memberOf = memberOf.filter(e => e !== 'OU');
+      console.log(memberOf);
+      var memberOfGroups = [];
+      for(var i = 0; i < memberOf.length; i++) {
+        memberOfGroups[i] = memberOf[i].toLowerCase();
+      }
+
+  // memberOfGroups = memberOfGroups.split('=');
+  // memberOfGroups = memberOfGroups[1];
+
       req.session.name = login;
       req.session.password = password;
-      req.session.memberOf = entry.object.memberOf;
+      req.session.memberOf = memberOfGroups;
       req.session.principalName = entry.object.name;
-      req.session.accountExpires = entry.object.accountExpires;
+      req.session.firstName = firstName;
+      req.session.accountExpires = accountExpires;
 
       // If user:
       res.redirect('/user');
