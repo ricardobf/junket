@@ -1,15 +1,16 @@
 html,
+
 body {
   height: 100%;
 }
 
 body {
-  display: -ms-flexbox;
+  /* display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
   align-items: center;
   padding-top: 01px;
-  padding-bottom: 40px;
+  padding-bottom: 40px; */
   background-color: #121212;
   color: #FFFFFF;
 }
@@ -28,6 +29,17 @@ body {
   /* border-right-color: #fff; */
 }
 
+.navbar{
+  background-color: #202020;
+}
+.navbar-brand {
+  /* background-color: #262626; */
+  color: #FFFFFF;
+  /* border-left-color: #fff; */
+  /* center-color: #fff; */
+  /* border-right-color: #fff; */
+}
+
 
 .full-width {
   -ms-flex-align: center;
@@ -35,20 +47,20 @@ body {
   width: 100%;
   padding: 50px;
   margin: auto;
-  max-width: 730px;
+  max-width: 400px;
 }
 
 .head {
   /* width: 100%; */
   /* padding: 1px; */
   /* margin: auto; */
-  max-height: 10px;
+  /* max-height: 10px; */
 }
 
 .user-page {
-  width: 100%;
+  /* width: 100%;
   padding: 50px;
-  margin: auto;
+  margin: auto; */
 }
 
 .form-signin {

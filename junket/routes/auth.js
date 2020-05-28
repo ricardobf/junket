@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var ldap = require('ldapjs');
 const assert = require('assert');
+var moment = require('moment');
 
 
 const server = "orb.sense.dcc.ufmg.br"; // 10.167.232.60s
@@ -54,8 +55,8 @@ router.post('/signin', (req, res, next) => {
       }
       var accountExpires = ldapToJS(entry.object.accountExpires).toISOString();
       accountExpires = accountExpires.substring(0,10);
-
-
+      var a = moment(accountExpires); 
+      a = a.endOf('day').fromNow();  
       var memberOf = entry.object.memberOf;
       memberOf = memberOf.toString().split('=');
       memberOf = memberOf.toString().split(',');
@@ -83,7 +84,8 @@ router.post('/signin', (req, res, next) => {
       req.session.memberOf = memberOfGroups;
       req.session.principalName = entry.object.name;
       req.session.firstName = firstName;
-      req.session.accountExpires = accountExpires;
+      // req.session.accountExpires = accountExpires;
+      req.session.accountExpires = a;
 
       // If user:
       res.redirect('/user');
@@ -94,8 +96,8 @@ router.post('/signin', (req, res, next) => {
     data.on('searchReference', referral => {
       console.log('referral: ' + referral.uris.join());
     });
-    data.on('error', err => {
-      console.error('error: ' + err.message);
+    data.on('error', err => { 
+      console.error(err) 
     });
     data.on('end', result => {
       console.log(result);
