@@ -1,3 +1,4 @@
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <a class="navbar-brand" href="#">
     Welcome, {{firstName}}
@@ -17,14 +18,11 @@
 </nav>
 
 <div class="full-width text-center">
-
-
-
   <pre></pre><pre></pre><pre></pre>
   <div class="sticky-bottom alert alert-primary" role="alert">
-  Your account expires {{accountExpires}}.
-  <pre></pre>
-  <a class="btn btn-sm btn-outline-dark btn-block" href="/auth/changepwd">Ask for renewal</a>
+    Your account expires {{accountExpires}}.
+    <pre></pre>
+    <a class="btn btn-sm btn-outline-dark btn-block" href="/auth/changepwd">Ask for renewal</a>
   </div>
   <ul class="list-group text-center">
     <li class="list-group-item disabled">Your Groups</li>
@@ -33,3 +31,5 @@
     {{/each}}
   </ul>
 </div>
+
+</body>

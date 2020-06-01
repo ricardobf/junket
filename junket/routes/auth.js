@@ -13,9 +13,13 @@ const adSuffix = "dc=sense,dc=dcc,dc=ufmg,dc=br"; //dc=sms,dc=br
 
 // Create client and bind to AD
 var client = ldap.createClient({
-  url: `ldap://${server}`
+  url: `ldap://${server}`,
+  reconnect: {
+    initialDelay: 100,
+    maxDelay: 1000,
+    failAfter: 10
+  }
 });
-
 
 /* GET home page. */
 router.get('/signin', (req, res, next) => {
@@ -41,9 +45,7 @@ router.post('/signin', (req, res, next) => {
     assert.ifError(err);
 
     data.on('searchEntry', entry => {
-      // console.log(entry.object.givenName);
-      // console.log(entry.object);
-      // console.log(entry.object.accountExpires);          
+      // console.log(entry.object);        
 
       
       var principalName = entry.object.name;
@@ -76,9 +78,6 @@ router.post('/signin', (req, res, next) => {
         memberOfGroups[i] = memberOf[i].toLowerCase();
       }
 
-  // memberOfGroups = memberOfGroups.split('=');
-  // memberOfGroups = memberOfGroups[1];
-
       req.session.name = login;
       req.session.password = password;
       req.session.memberOf = memberOfGroups;
@@ -107,7 +106,7 @@ router.post('/signin', (req, res, next) => {
 
 
 
-  //MOSTRAR MENSAGEM DE ERRO
+  //MOSTRAR MENSAGEM DE ERRO 
 
   
   // res.write('<h1>Wrong login credentials.</h1>');

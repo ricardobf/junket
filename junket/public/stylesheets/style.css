@@ -40,6 +40,16 @@ body {
   /* border-right-color: #fff; */
 }
 
+.navbar-custom-footer{ 
+  background-color: #121212; 
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  padding: 0;
+  list-style: none;
+  font-size: small;
+} 
+
 
 .full-width {
   -ms-flex-align: center;
@@ -50,17 +60,9 @@ body {
   max-width: 400px;
 }
 
-.head {
-  /* width: 100%; */
-  /* padding: 1px; */
-  /* margin: auto; */
-  /* max-height: 10px; */
-}
-
-.user-page {
-  /* width: 100%;
-  padding: 50px;
-  margin: auto; */
+.not-found {
+  align-items: center;
+  margin: auto;
 }
 
 .form-signin {
