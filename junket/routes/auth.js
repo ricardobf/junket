@@ -96,7 +96,7 @@ router.post('/signin', (req, res, next) => {
       console.log('referral: ' + referral.uris.join());
     });
     data.on('error', err => { 
-      console.error(err) 
+      console.log(err) 
     });
     data.on('end', result => {
       console.log(result);
