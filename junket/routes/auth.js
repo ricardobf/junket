@@ -90,6 +90,7 @@ router.post('/signin', (req, res, next) => {
       res.redirect('/user');
       // If admin:
       // res.redirect('/admin');
+      
     });
     
     data.on('searchReference', referral => {
@@ -103,7 +104,10 @@ router.post('/signin', (req, res, next) => {
     });
   });
 
-
+  client.unbind((err) => {
+    assert.ifError(err);
+    console.log("OIII");
+  });
 
 
   //MOSTRAR MENSAGEM DE ERRO 
@@ -137,12 +141,7 @@ router.get('/logout',(req,res) => {
   req.session.destroy((err) => {
       if(err) {
           return console.log(err);
-      }
-      // Wrap up
-      client.unbind((err) => {
-        assert.ifError(err);
-        console.log("OIII");
-      });
+      }      
       res.redirect('/');
   });
 
