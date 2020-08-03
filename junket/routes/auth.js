@@ -13,12 +13,7 @@ const adSuffix = "dc=sense,dc=dcc,dc=ufmg,dc=br"; //dc=sms,dc=br
 
 // Create client and bind to AD
 var client = ldap.createClient({
-  url: `ldap://${server}`,
-  reconnect: {
-    initialDelay: 100,
-    maxDelay: 1000,
-    failAfter: 10
-  }
+  url: `ldap://${server}`
 });
 
 /* GET home page. */
