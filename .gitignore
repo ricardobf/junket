@@ -1,5 +1,4 @@
-junket/node_modules
-junket/package-lock.json
+node_modules
 
 # Logs
 logs
