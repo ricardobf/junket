@@ -5,15 +5,13 @@ const assert = require('assert');
 var moment = require('moment');
 
 
-const server = "orb.sense.dcc.ufmg.br"; // 10.167.232.60s
-// const server = "10.167.232.60";
+const ldap_server = "www.zflexldap.com";
+const ldap_port = 389;
+const ldap_bind_dn = "cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com"
+const ldap_bind_password = "zflexpass";
 
-const adSuffix = "dc=sense,dc=dcc,dc=ufmg,dc=br"; //dc=sms,dc=br
-// const adSuffix = "dc=sms,dc=br"; 
-
-// Create client and bind to AD
-var client = ldap.createClient({
-  url: `ldap://${server}`
+var client = ldap.createClient({ 
+  url: `ldap://${ldap_server}:${ldap_port}`
 });
 
 /* GET home page. */
@@ -23,63 +21,29 @@ router.get('/signin', (req, res, next) => {
 
 router.post('/signin', (req, res, next) => {
   const { login, password } = req.body;
-  const userPrincipalName = login.concat("@sense.dcc.ufmg.br"); // sms.br
-  // const userPrincipalName = login.concat("@sms.br"); // sms.br
 
-  client.bind(userPrincipalName, password, (err) => {
+  client.bind(ldap_bind_dn, ldap_bind_password, (err) => {
     assert.ifError(err);
   });
 
-  // Search AD for user
+  // // Search AD for user
   var searchOptions = {
-      scope: 'sub',
-      filter: `(userPrincipalName=${userPrincipalName})`
+      scope: 'base'
   };
 
-  client.search(adSuffix, searchOptions, (err,data) => {
+  client.search(ldap_bind_dn, searchOptions, (err,data) => {
     assert.ifError(err);
 
     data.on('searchEntry', entry => {
-      // console.log(entry.object);        
+      console.log(entry.object);        
 
-      
-      var principalName = entry.object.name;
-      var fullname = principalName.split(' ');
-      var firstName = fullname[0];
-
-      function ldapToJS(n) {
-        return new Date(n/1e4 - 1.16444736e13);
-      }
-      var accountExpires = ldapToJS(entry.object.accountExpires).toISOString();
-      accountExpires = accountExpires.substring(0,10);
-      var a = moment(accountExpires); 
-      a = a.endOf('day').fromNow();  
-      var memberOf = entry.object.memberOf;
-      memberOf = memberOf.toString().split('=');
-      memberOf = memberOf.toString().split(',');
-      memberOf = memberOf.filter(e => e !== 'DC');
-      memberOf = memberOf.filter(e => e !== 'ufmg');
-      memberOf = memberOf.filter(e => e !== 'br');
-      memberOf = memberOf.filter(e => e !== 'sense');
-      memberOf = memberOf.filter(e => e !== 'Sense');
-      memberOf = memberOf.filter(e => e !== 'CN');
-      memberOf = memberOf.filter(e => e !== 'Users');
-      memberOf = memberOf.filter(e => e !== 'dcc');
-      memberOf = memberOf.filter(e => e !== 'NPS');
-      memberOf = memberOf.filter(e => e !== 'OU');
-      console.log(memberOf);
-      var memberOfGroups = [];
-      for(var i = 0; i < memberOf.length; i++) {
-        memberOfGroups[i] = memberOf[i].toLowerCase();
-      }
 
       req.session.name = login;
       req.session.password = password;
-      req.session.memberOf = memberOfGroups;
+      req.session.memberOf = login;
       req.session.principalName = entry.object.name;
-      req.session.firstName = firstName;
-      // req.session.accountExpires = accountExpires;
-      req.session.accountExpires = a;
+      req.session.firstName = login;
+      req.session.accountExpires = "a";
 
       // If user:
       res.redirect('/user');
