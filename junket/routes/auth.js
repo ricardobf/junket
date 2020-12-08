@@ -5,14 +5,11 @@ const assert = require('assert');
 var moment = require('moment');
 
 
-const ldap_server = "www.zflexldap.com";
 const ldap_port = 389;
-const ldap_bind_dn = "cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com"
-const ldap_bind_password = "zflexpass";
-
-var client = ldap.createClient({ 
-  url: `ldap://${ldap_server}:${ldap_port}`
-});
+const ldap_server = "ldap://www.zflexldap.com";
+const suffix = "dc=zflexsoftware,dc=com";
+const readerDN = "cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com";
+const readerPwd = "zflexpass";
 
 /* GET home page. */
 router.get('/signin', (req, res, next) => {
@@ -20,53 +17,88 @@ router.get('/signin', (req, res, next) => {
 });
 
 router.post('/signin', (req, res, next) => {
+
   const { login, password } = req.body;
 
-  client.bind(ldap_bind_dn, ldap_bind_password, (err) => {
-    assert.ifError(err);
-  });
+  var result = "";    // To send back to the client
+	
+	var client = ldap.createClient({
+      url: ldap_server
+	});
+	
+	client.bind(readerDN, readerPwd, function(err) {
+		if (err) {
+			result += "Reader bind failed " + err;
+			res.send(result);
+			return;
+		}
+		
+		result += "Reader bind succeeded\n";
+		
+		var filter = `(uid=${login})`;
+		
+		result += `LDAP filter: ${filter}\n`;
+		
+		client.search(suffix, {filter:filter, scope:"sub"}, (err, searchRes) => {
 
-  // // Search AD for user
-  var searchOptions = {
-      scope: 'base'
-  };
-
-  client.search(ldap_bind_dn, searchOptions, (err,data) => {
-    assert.ifError(err);
-
-    data.on('searchEntry', entry => {
-      console.log(entry.object);        
-
-
-      req.session.name = login;
-      req.session.password = password;
-      req.session.memberOf = login;
-      req.session.principalName = entry.object.name;
-      req.session.firstName = login;
-      req.session.accountExpires = "a";
-
-      // If user:
-      res.redirect('/user');
-      // If admin:
-      // res.redirect('/admin');
+      var search = "";
       
-    });
-    
-    data.on('searchReference', referral => {
-      console.log('referral: ' + referral.uris.join());
-    });
-    data.on('error', err => { 
-      console.log(err) 
-    });
-    data.on('end', result => {
-      console.log(result);
-    });
-  });
+      if (err) {
+        result += "Search failed " + err;
+        res.send(result);
+        return;
+      }
+      
+      searchRes.on("searchEntry", (entry) => {
 
-  client.unbind((err) => {
-    assert.ifError(err);
-    console.log("OIII");
-  });
+        result += "Found entry: " + entry + "\n";
+        search = entry;
+
+      });
+
+      searchRes.on("error", (err) => {
+        result += "Search failed with " + err;
+        res.send(result);
+      });
+      
+      searchRes.on("end", (retVal) => {
+
+        result += "DN:" + search.objectName + "\n";
+        result += "Search retval:" + retVal + "\n";					
+        
+            
+        client.bind(search.objectName, password, function(err) {
+
+          console.log(search);
+          var teste = search.attributes;
+          console.log(teste);
+
+          if (err) 
+            result += "Bind with real credential error: " + err;
+          else{
+            result += "Bind with real credential is a success";
+            
+            req.session.name = login;
+            req.session.password = password;
+            req.session.memberOf = login;
+            req.session.principalName = search.givenName;
+            req.session.firstName = search.objectName;
+            req.session.accountExpires = "a";
+            // If user:
+            res.redirect('/user');
+            // If admin:
+            // res.redirect('/admin');  
+          }
+        });  // client.bind (real credential)
+
+      });   // searchRes.on("end",...)
+				
+		});   // client.search
+		
+	}); // client.bind  (reader account)
+	
+}); // app.post("/ldap"...)
+
 
 
   //MOSTRAR MENSAGEM DE ERRO 
@@ -75,7 +107,6 @@ router.post('/signin', (req, res, next) => {
   // res.write('<h1>Wrong login credentials.</h1>');
   // res.end('<a href='+'/'+'>Login</a>');
 
-});
 
 router.get('/signup', function(req, res, next) {
   res.render('auth/signup', { title: 'Junket' });
