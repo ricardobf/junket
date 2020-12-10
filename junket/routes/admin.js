@@ -7,11 +7,11 @@ router.get('/', function(req, res, next) {
   const password = req.session.password;
   const memberOf = req.session.memberOf;
   const principalName = req.session.principalName;
-  const accountExpires = req.session.accountExpires;
+  const adminMail = req.session.adminMail;
   // sess = req.session;
   
   if(req.session.name) {
-      res.render("admin/admin", {title: "Welcome", login, password, memberOf, principalName, accountExpires});
+      res.render("admin/admin", {title: "Welcome", login, password, memberOf, principalName, adminMail});
   }
   else {
       res.write('<h1>Please login first.</h1>');
