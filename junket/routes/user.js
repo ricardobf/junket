@@ -5,7 +5,6 @@ router.get('/', function(req, res, next) {
   const login = req.session.name;
   const password = req.session.password;
   const memberOf = req.session.memberOf;
-  const principalName = req.session.principalName;
   const firstName = req.session.firstName;
   const adminMail = req.session.adminMail;
   
