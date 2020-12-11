@@ -103,10 +103,15 @@ router.post('/signin', (req, res, next) => {
             req.session.principalName = searchList[0].attributes[1]._vals.toString('utf8');
             req.session.firstName = searchList[0].attributes[1]._vals.toString('utf8');
             req.session.adminMail = readerMail;
-            // If user:
-            // res.redirect('/user');
-            // If admin:
-            res.redirect('/admin');  
+
+            if(login == "guest1"){
+              req.session.admin = true;
+              res.redirect('/admin');  
+            }
+            else{
+              req.session.admin = false;
+              res.redirect('/user');
+            }
           }
         });
       });	
@@ -222,7 +227,6 @@ router.get('/logout',(req,res) => {
       }      
       res.redirect('/');
   });
-
 });
 
 module.exports = router;

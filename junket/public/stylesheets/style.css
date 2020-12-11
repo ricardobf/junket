@@ -144,3 +144,11 @@ body {
   border-bottom-right-radius: 0.25rem;
   margin-bottom: 10px;
 }
+
+.modal-title {
+  color: black;
+}
+
+.modal-body {
+  color: black;
+}
