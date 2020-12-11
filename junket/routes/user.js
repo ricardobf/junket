@@ -5,12 +5,11 @@ router.get('/', function(req, res, next) {
   const login = req.session.name;
   const password = req.session.password;
   const memberOf = req.session.memberOf;
-  const principalName = req.session.principalName;
   const firstName = req.session.firstName;
-  const accountExpires = req.session.accountExpires;
+  const adminMail = req.session.adminMail;
   
   if(req.session.name) {
-      res.render("user/user", {title: "Welcome", login, password, memberOf, firstName, accountExpires});
+      res.render("user/user", {title: "Welcome", login, password, memberOf, firstName, adminMail});
   }
   else {
       res.status(404);

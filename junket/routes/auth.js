@@ -5,16 +5,12 @@ const assert = require('assert');
 var moment = require('moment');
 
 
-const server = "orb.sense.dcc.ufmg.br"; // 10.167.232.60s
-// const server = "10.167.232.60";
-
-const adSuffix = "dc=sense,dc=dcc,dc=ufmg,dc=br"; //dc=sms,dc=br
-// const adSuffix = "dc=sms,dc=br"; 
-
-// Create client and bind to AD
-var client = ldap.createClient({
-  url: `ldap://${server}`
-});
+const ldap_port = 389;
+const ldap_server = `ldap://www.zflexldap.com:${ldap_port}`;
+const suffix = "dc=zflexsoftware,dc=com";
+const readerDN = "cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com";
+const readerMail = "ro_admin@zflexsoftware.com";
+const readerPwd = "zflexpass";
 
 /* GET home page. */
 router.get('/signin', (req, res, next) => {
@@ -22,95 +18,105 @@ router.get('/signin', (req, res, next) => {
 });
 
 router.post('/signin', (req, res, next) => {
+
   const { login, password } = req.body;
-  const userPrincipalName = login.concat("@sense.dcc.ufmg.br"); // sms.br
-  // const userPrincipalName = login.concat("@sms.br"); // sms.br
 
-  client.bind(userPrincipalName, password, (err) => {
-    assert.ifError(err);
-  });
+  var result = "";
+	
+	var client = ldap.createClient({
+      url: ldap_server
+	});
+	
+	client.bind(readerDN, readerPwd, function(err) {
+		if (err) {
+			result += "Reader bind failed " + err;
+			res.send(result);
+			return;
+		}
+		
+		result += "Reader bind succeeded\n";
+		
+		var filter = `(uid=${login})`;
+		
+		result += `LDAP filter: ${filter}\n`;
+		
+		client.search(suffix, {filter:filter, scope:"sub"}, (err, searchRes) => {
 
-  // Search AD for user
-  var searchOptions = {
-      scope: 'sub',
-      filter: `(userPrincipalName=${userPrincipalName})`
-  };
-
-  client.search(adSuffix, searchOptions, (err,data) => {
-    assert.ifError(err);
-
-    data.on('searchEntry', entry => {
-      // console.log(entry.object);        
-
+      var searchList = [];
+      var memberOfList = [];
       
-      var principalName = entry.object.name;
-      var fullname = principalName.split(' ');
-      var firstName = fullname[0];
-
-      function ldapToJS(n) {
-        return new Date(n/1e4 - 1.16444736e13);
+      if (err) {
+        result += "Search failed " + err;
+        res.send(result);
+        return;
       }
-      var accountExpires = ldapToJS(entry.object.accountExpires).toISOString();
-      accountExpires = accountExpires.substring(0,10);
-      var a = moment(accountExpires); 
-      a = a.endOf('day').fromNow();  
-      var memberOf = entry.object.memberOf;
-      memberOf = memberOf.toString().split('=');
-      memberOf = memberOf.toString().split(',');
-      memberOf = memberOf.filter(e => e !== 'DC');
-      memberOf = memberOf.filter(e => e !== 'ufmg');
-      memberOf = memberOf.filter(e => e !== 'br');
-      memberOf = memberOf.filter(e => e !== 'sense');
-      memberOf = memberOf.filter(e => e !== 'Sense');
-      memberOf = memberOf.filter(e => e !== 'CN');
-      memberOf = memberOf.filter(e => e !== 'Users');
-      memberOf = memberOf.filter(e => e !== 'dcc');
-      memberOf = memberOf.filter(e => e !== 'NPS');
-      memberOf = memberOf.filter(e => e !== 'OU');
-      console.log(memberOf);
-      var memberOfGroups = [];
-      for(var i = 0; i < memberOf.length; i++) {
-        memberOfGroups[i] = memberOf[i].toLowerCase();
-      }
-
-      req.session.name = login;
-      req.session.password = password;
-      req.session.memberOf = memberOfGroups;
-      req.session.principalName = entry.object.name;
-      req.session.firstName = firstName;
-      // req.session.accountExpires = accountExpires;
-      req.session.accountExpires = a;
-
-      // If user:
-      res.redirect('/user');
-      // If admin:
-      // res.redirect('/admin');
       
-    });
+      searchRes.on("searchEntry", (entry) => {
+        result += "Found entry: " + entry + "\n";
+        searchList.push(entry);
+      });
+
+      searchRes.on("error", (err) => {
+        result += "Search failed with " + err;
+        res.send(result);
+      });
+
+      searchRes.on("end", (retVal) => {
+
+        result += "DN:" + searchList[0].objectName + "\n";
+        result += "Search retval:" + retVal + "\n";					
+						
+        client.search(suffix, {filter:`(member=${searchList[0].objectName})`, scope:"sub"},
+          (err, searchRes) => {
+            
+          if (err) {
+            result += "Group search failed " + err;
+            res.send(result);
+            return;
+          }
     
-    data.on('searchReference', referral => {
-      console.log('referral: ' + referral.uris.join());
-    });
-    data.on('error', err => { 
-      console.log(err) 
-    });
-    data.on('end', result => {
-      console.log(result);
-    });
-  });
+          searchRes.on("searchEntry", (entry) => {
+            result += "Group search found entry: " + entry.objectName + "\n";
+            memberOfList.push(entry.objectName.split(",", 1).toString().substring(3));
+          });
 
-  client.unbind((err) => {
-    assert.ifError(err);
-    console.log("OIII");
-  });
+          searchRes.on("error", (err) => {
+            result += "Group search failed with " + err;
+            res.send(result);
+          });
+            
+        });
+       
+        client.bind(searchList[0].objectName, password, function(err) {
 
+          if (err){
+            result += "Bind with real credential error: " + err;            
+            res.write('<h1>Wrong login credentials.</h1>');
+            res.end('<a href='+'/'+'>Login</a>');
+          }
+          else{
+            result += "Bind with real credential is a success";
+            
+            req.session.name = login;
+            req.session.password = password;
+            req.session.memberOf = memberOfList;
+            req.session.principalName = searchList[0].attributes[1]._vals.toString('utf8');
+            req.session.firstName = searchList[0].attributes[1]._vals.toString('utf8');
+            req.session.adminMail = readerMail;
 
-  //MOSTRAR MENSAGEM DE ERRO 
-
-  
-  // res.write('<h1>Wrong login credentials.</h1>');
-  // res.end('<a href='+'/'+'>Login</a>');
-
+            if(login == "guest1"){
+              req.session.admin = true;
+              res.redirect('/admin');  
+            }
+            else{
+              req.session.admin = false;
+              res.redirect('/user');
+            }
+          }
+        });
+      });	
+		});
+	}); 
 });
 
 router.get('/signup', function(req, res, next) {
@@ -118,7 +124,25 @@ router.get('/signup', function(req, res, next) {
 });
 
 router.post('/signup', function(req, res, next) {
-  const { login, password } = req.body;
+  const { login, email, name, lastName, password, cPassword } = req.body;
+
+  var client = ldap.createClient({
+    url: URL
+  });
+
+  var newUser = {
+    cn: login,
+    sn: name + lastName,
+    mail: email,
+    userPassword: password
+  }
+
+  if(password == cPassword){
+    client.bind(user,pass,function(err){
+      client.add(readerDN, newUser, callback);
+    });
+  }
+
   res.render('auth/signup', { title: 'Junket' });
 });
 
@@ -129,7 +153,71 @@ router.get('/changepwd', function(req, res, next) {
   else {
     res.status(404);
     res.render("error/notfound");
-}
+  }
+});
+
+router.post('/changepwd', function(req, res, next) {
+  if(req.session.name) {
+    res.render('auth/changepwd', { title: 'Change Password' });
+
+    const { oldPassword, newPassword, cnewPassword  } = req.body;
+
+    var client = ldap.createClient({
+      url: ldap_server
+    });
+
+    client.bind(readerDN, oldPassword, function (err, result) {
+      if (err) {
+        console.error('error: ' + err);
+      } else {
+        client.search(suffix, {
+          filter: filter,
+          attributes: 'dn',
+          scope: 'sub'
+        }, function(err, res) {
+          res.on('searchEntry', function(entry) {
+            var userDN = entry.object.dn;
+            if(newPassword == cnewPassword){
+              client.modify(userDN, [
+                new ldap.Change({
+                  operation: 'delete',
+                  modification: {
+                    unicodePwd: encodePassword(oldPassword)
+                  }
+                }),
+                new ldap.Change({
+                  operation: 'add',
+                  modification: {
+                    unicodePwd: encodePassword(newPassword)
+                  }
+                })
+              ], function(err) {
+                if (err) {
+                  console.log(err.code);
+                  console.log(err.name);
+                  console.log(err.message);
+                  client.unbind();
+                }
+                else {
+                  console.log('Password changed!');
+                }
+              });
+            }
+          });
+          res.on('error', function(err) {
+            console.error('error: ' + err.message);
+          });
+          res.on('end', function(result) {
+            console.log('status: ' + result.status);
+          });
+        });
+      }
+    });
+  }
+  else {
+    res.status(404);
+    res.render("error/notfound");
+  }
 });
 
 router.get('/logout',(req,res) => {
@@ -139,7 +227,6 @@ router.get('/logout',(req,res) => {
       }      
       res.redirect('/');
   });
-
 });
 
 module.exports = router;

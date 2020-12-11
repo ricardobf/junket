@@ -21,8 +21,8 @@ app.set("view engine", "hbs");
 app.use(session({
   secret: "Secret",
   proxy: true,
-  // resave: false,
-  // saveUninitialized: false
+  resave: true,
+  saveUninitialized: true
 }));
 
 app.use(logger("dev"));
