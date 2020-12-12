@@ -37,11 +37,11 @@ This documentation is available on [junket.site](https://junket.site)
   with content (example):
 ```
 LDAP_PORT=389
-LDAP_SERVER="ldap://www.zflexldap.com"
-SUFFIX="dc=zflexsoftware,dc=com"
-READER_DN="cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com"
-READER_MAIL="ro_admin@zflexsoftware.com"
-READER_PWD="zflexpass"
+LDAP_SERVER=ldap://www.zflexldap.com
+SUFFIX=dc=zflexsoftware,dc=com
+READER_DN=cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com
+READER_MAIL=ro_admin@zflexsoftware.com
+READER_PWD=zflexpass
 ```
 
 2. Run `docker run` command:
@@ -64,7 +64,7 @@ READER_PWD="zflexpass"
 # cd junket/junket
 ```
 
-3. Change env file according to your LDAP/AD server:
+3. Create env file according to your LDAP/AD server:
 ```shell
 # vim env.list
 ```
