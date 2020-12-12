@@ -3,7 +3,7 @@ on:
   push
 jobs:
   push_to_registries:
-    name: Push Docker image to multiple registries
+    name: Push Docker image to DockerHub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -14,9 +14,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Build and push
+        id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: .
           file: ./junket/Dockerfile
           push: true
           tags: ricardob/junket:latest
