@@ -8,15 +8,10 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          file: ./junket/Dockerfile
-          push: true
-          tags: ricardob/junket:latest
+          repository: ricardob/junket
+          tag_with_ref: true
