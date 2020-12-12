@@ -5,12 +5,12 @@ const assert = require('assert');
 var moment = require('moment');
 
 
-const ldap_port = 389;
-const ldap_server = `ldap://www.zflexldap.com:${ldap_port}`;
-const suffix = "dc=zflexsoftware,dc=com";
-const readerDN = "cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com";
-const readerMail = "ro_admin@zflexsoftware.com";
-const readerPwd = "zflexpass";
+const ldap_port = process.env.LDAP_PORT;
+const ldap_server = process.env.LDAP_SERVER + ":" + ldap_port;
+const suffix = process.env.SUFFIX;
+const readerDN = process.env.READER_DN;
+const readerMail = process.env.READER_MAIL;
+const readerPwd = process.env.READER_PWD;
 
 /* GET home page. */
 router.get('/signin', (req, res, next) => {
