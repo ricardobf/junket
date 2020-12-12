@@ -19,9 +19,11 @@ This documentation is available on [junket.site](https://junket.site)
 
 **Table of Contents**
 
-1. [Requirements](#requirements)
-1. [Installation](#installation)
-1. [License](#license)
+- [Requirements](#requirements)
+- [Installation](#installation)
+  * [Using Docker](#installationdocker)
+  * [Using npm](#installationnpm)
+- [License](#license)
 
 ### Requirements
 
@@ -32,7 +34,7 @@ This documentation is available on [junket.site](https://junket.site)
 
 ### Installation
 
-#### Install and run `junket` locally (Using Docker):
+#### Install and run `junket` locally (Using Docker): <a name="installationdocker"></a>
 
 1. Create env file according to your LDAP/AD server:
 ```shell
@@ -56,7 +58,7 @@ READER_PWD="zflexpass"
 3. On your browser navigate to [localhost](http://localhost)
 
 
-#### Install and run `junket` locally (Using npm):
+#### Install and run `junket` locally (Using npm): <a name="installationnpm"></a>
 
 1. Clone Junket repository:
 ```shell
