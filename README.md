@@ -46,7 +46,7 @@ READER_PWD="zflexpass"
 
 2. Run `docker run` command:
 ```shell
-# run --name junket -p 8080:8080 --env-file ./env.list -d ricardob/junket
+# docker run --name junket -p 8080:8080 --env-file ./env.list -d ricardob/junket
 ```
 
 3. On your browser navigate to [localhost](http://localhost)
