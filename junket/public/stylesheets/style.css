@@ -1,27 +1,72 @@
 html,
+
 body {
   height: 100%;
 }
 
 body {
-  display: -ms-flexbox;
+  /* display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 01px;
+  padding-bottom: 40px; */
   background-color: #121212;
   color: #FFFFFF;
 }
 
-.full-width {
+.list-group {
   width: 100%;
-  padding: 15px;
+  padding: 50px;
+  margin: auto;
+  max-width: 330px;
+}
+
+.list-group-item {
+  background-color: #262626;
+  /* border-left-color: #fff; */
+  /* center-color: #fff; */
+  /* border-right-color: #fff; */
+}
+
+.navbar{
+  background-color: #202020;
+}
+.navbar-brand {
+  /* background-color: #262626; */
+  color: #FFFFFF;
+  /* border-left-color: #fff; */
+  /* center-color: #fff; */
+  /* border-right-color: #fff; */
+}
+
+.navbar-custom-footer{ 
+  background-color: #121212; 
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  padding: 0;
+  list-style: none;
+  font-size: small;
+} 
+
+
+.full-width {
+  -ms-flex-align: center;
+  align-items: center;
+  width: 100%;
+  padding: 50px;
+  margin: auto;
+  max-width: 400px;
+}
+
+.not-found {
+  align-items: center;
   margin: auto;
 }
 
 .form-signin {
-  max-width: 330px;
+  max-width: 340px;
 }
 .form-signin .checkbox {
   font-weight: 400;
@@ -40,6 +85,16 @@ body {
   border-radius: 0;
   margin-bottom: -1px;
 }
+.form-signin img {
+  width: 60%;
+  height: 60%;
+}
+.form-signin footer {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  margin-top: -200px;
+}
 .form-signin input:first-of-type {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
@@ -48,4 +103,52 @@ body {
   border-bottom-left-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
   margin-bottom: 10px;
+}
+
+.form-signup {
+  max-width: 530px;
+}
+.form-signup .checkbox {
+  font-weight: 400;
+}
+.form-signup .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signup .form-control:focus {
+  z-index: 2;
+}
+.form-signup input {
+  border-radius: 0;
+  margin-bottom: -1px;
+}
+.form-signup img {
+  width: 60%;
+  height: 60%;
+}
+.form-signup footer {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  margin-top: -200px;
+}
+.form-signup input:first-of-type {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+.form-signup input:last-of-type {
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  color: black;
+}
+
+.modal-body {
+  color: black;
 }
