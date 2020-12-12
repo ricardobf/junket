@@ -97,4 +97,4 @@ READER_PWD="zflexpass"
 
 ## License
 
-See [LICENSE](https://github.com/ricardobf/junket/LICENSE).
+See [LICENSE](http://www.apache.org/licenses/LICENSE-2.0).
