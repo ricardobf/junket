@@ -6,6 +6,16 @@ jobs:
     name: Push Docker image to DockerHub
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+          ${{ runner.os }}-buildx-
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Login to DockerHub
@@ -19,5 +29,10 @@ jobs:
         with:
           context: ./junket
           file: ./junket/Dockerfile
+          tags: ricardob/junket:latest
+          builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: bengotch/simplewhale:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
