@@ -25,28 +25,79 @@ This documentation is available on [junket.site](https://junket.site)
 
 ### Requirements
 
-- Docker;
-- Running LDAP/AD server;
+- Docker (Optional);
+- npm (Optional);
+- A running LDAP/AD server;
 - User with bind privilegies;
 
 ### Installation
 
-### Install and run only the `junket` module locally:
+#### Install and run `junket` locally (Using Docker):
 
-Using Docker:
-
-1. Navigate to backend folder:
+1. Create env file according to your LDAP/AD server:
 ```shell
-# cd backend
+# vim env.list
+```
+  with content (example):
+```
+LDAP_PORT=389
+LDAP_SERVER="ldap://www.zflexldap.com"
+SUFFIX="dc=zflexsoftware,dc=com"
+READER_DN="cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com"
+READER_MAIL="ro_admin@zflexsoftware.com"
+READER_PWD="zflexpass"
 ```
 
 2. Run `docker run` command:
 ```shell
-# docker run
+# run --name junket -p 8080:8080 --env-file ./env.list -d ricardob/junket
 ```
 
 3. On your browser navigate to [localhost](http://localhost)
 
+
+#### Install and run `junket` locally (Using npm):
+
+1. Clone Junket repository:
+```shell
+# git clone git@github.com:ricardobf/junket.git
+```
+
+2. Navigate to junket package folder:
+```shell
+# cd junket/junket
+```
+
+3. Change env file according to your LDAP/AD server:
+```shell
+# vim env.list
+```
+  with content (example):
+```
+LDAP_PORT=389
+LDAP_SERVER="ldap://www.zflexldap.com"
+SUFFIX="dc=zflexsoftware,dc=com"
+READER_DN="cn=ro_admin,ou=sysadmins,dc=zflexsoftware,dc=com"
+READER_MAIL="ro_admin@zflexsoftware.com"
+READER_PWD="zflexpass"
+```
+
+4. Export env variables to local shell:
+```shell
+# export $(xargs < env.list)
+```
+
+5. Run npm install command:
+```shell
+# npm install
+```
+
+6. Run npm start command:
+```shell
+# npm start
+```
+
+7. On your browser navigate to [localhost](http://localhost)
 
 ## License
 
