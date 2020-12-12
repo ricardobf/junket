@@ -51,6 +51,12 @@ READER_PWD=zflexpass
 
 3. On your browser navigate to [localhost](http://localhost)
 
+The username for login in the example LDAP server is: `guest3`
+Password: `guest3password`
+
+If you want to access the admin page, you can login with the user: `guest1`
+Password: `guest1password`
+
 
 #### Install and run `junket` locally (Using npm): <a name="installationnpm"></a>
 
