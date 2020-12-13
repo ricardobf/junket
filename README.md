@@ -49,7 +49,7 @@ READER_PWD=zflexpass
 # docker run --name junket -p 8080:8080 --env-file ./env.list -d ricardob/junket
 ```
 
-3. On your browser navigate to [localhost](http://localhost)
+3. On your browser navigate to [localhost:8080](http://localhost:8080)
 
 - The username for login in the example LDAP server is: `guest3`
 - Password: `guest3password`
@@ -99,7 +99,7 @@ READER_PWD="zflexpass"
 # npm start
 ```
 
-7. On your browser navigate to [localhost](http://localhost)
+7. On your browser navigate to [localhost:8080](http://localhost:8080)
 
 - The username for login in the example LDAP server is: `guest3`
 - Password: `guest3password`
