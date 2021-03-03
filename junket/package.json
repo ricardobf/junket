@@ -19,7 +19,7 @@
     "ldapjs": "^1.0.2",
     "moment": "^2.26.0",
     "morgan": "~1.9.1",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
