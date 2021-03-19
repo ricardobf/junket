@@ -62,7 +62,7 @@ READER_PWD=zflexpass
 
 1. Clone Junket repository:
 ```shell
-# git clone git@github.com:ricardobf/junket.git
+# git clone https://github.com/ricardobf/junket.git
 ```
 
 2. Navigate to junket package folder:
